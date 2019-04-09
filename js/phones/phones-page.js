@@ -3,7 +3,7 @@ import PhonesService from './services/phones-service.js';
 
 export default class PhonesPage {
     constructor({element}) {
-        this.element = element;
+        this._element = element;
         this._render();
 
         this._catalog = new PhonesCatalog({
