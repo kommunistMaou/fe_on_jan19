@@ -1,17 +1,25 @@
 import Component from './component.js'
 
 export default class PhoneViewer extends Component {
-        show(phoneDetails) {
+
+  constructor ({element, onBack}) {
+    super({element});
+    this.onBack = onBack;
+
+  this.on('click', '[data-element = "back-button"]', this.onBack);
+  }
+
+  show(phoneDetails) {
         this._phoneDetails = phoneDetails;
         this._render();
         super.show();
-       }
+  }
 
-    _render() {
+  _render() {
         this._element.innerHTML = `
         <img class="phone" src=${this._phoneDetails.images[0]}">
 
-    <button>Back</button>
+    <button data-element = "back-button">Back</button>
     <button>Add to basket</button>
 
 
