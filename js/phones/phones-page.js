@@ -11,11 +11,17 @@ export default class PhonesPage {
         this._catalog = new PhonesCatalog({
             element: this._element.querySelector('[data-component = "phone-catalog"]'),
             phones: PhonesService.getAll(), 
-            onPhoneSelected: (id) => {
+          /*  onPhoneSelected: (id) => {
               const phoneDetails = PhonesService.getById(id);
               this._catalog.hide();
               this._viewer.show(phoneDetails);
-            }
+            }*/
+        })
+
+        this._catalog.subscribe('phone-selected', (id) => {
+          const phoneDetails = PhonesService.getById(id);
+          this._catalog.hide();
+          this._viewer.show(phoneDetails);
         })
 
         this._viewer = new PhoneViewer({
