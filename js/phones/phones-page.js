@@ -10,8 +10,7 @@ export default class PhonesPage {
 
         this._initCatalog();
         this._initViewer();
-        
-        
+                
     }
 
     _initCatalog() {
