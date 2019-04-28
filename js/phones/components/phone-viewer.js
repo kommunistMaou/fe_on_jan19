@@ -1,17 +1,34 @@
 import Component from './component.js'
 
 export default class PhoneViewer extends Component {
-        show(phoneDetails) {
+
+  constructor ({element}) {
+    super({element});
+
+  this.on('click', '[data-element = "back-button"]', (event) => {
+    this.emit('back');
+  });
+  this.on('click', '[data-element = "small-preview"]', (event) => {
+    const bigPreview = this._element.querySelector('[data-element = "big-preview"]');
+    bigPreview.src = event.target.src 
+  })
+}
+
+  
+
+  show(phoneDetails) {
         this._phoneDetails = phoneDetails;
         this._render();
         super.show();
-       }
+  }
 
-    _render() {
+  _render() {
         this._element.innerHTML = `
-        <img class="phone" src=${this._phoneDetails.images[0]}">
+        <img 
+        data-element = "big-preview"
+        class="phone" src=${this._phoneDetails.images[0]}">
 
-    <button>Back</button>
+    <button data-element = "back-button">Back</button>
     <button>Add to basket</button>
 
 
@@ -20,24 +37,18 @@ export default class PhoneViewer extends Component {
     <p>Motorola XOOM with Wi-Fi has a super-powerful dual-core processor and Android™ 3.0 (Honeycomb) — the Android platform designed specifically for tablets. With its 10.1-inch HD widescreen display, you’ll enjoy HD video in a thin, light, powerful and upgradeable tablet.</p>
 
     <ul class="phone-thumbs">
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
+    ${this._phoneDetails.images.map(imageUrl => `
+    <li>
+        <img 
+        src="${imageUrl}"
+        data-element = "small-preview"
+        >
+
       </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.1.jpg">
-      </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.2.jpg">
-      </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.3.jpg">
-      </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.4.jpg">
-      </li>
-      <li>
-        <img src="img/phones/motorola-xoom-with-wi-fi.5.jpg">
-      </li>
+    `
+    ).join('')}  
+    
+      
     </ul>
         `
     }

@@ -3,22 +3,18 @@ import Component from './component.js';
 export default class PhonesCatalog extends Component{
     constructor({
       element, 
-      phones = [], 
-      onPhoneSelected = () => {}
+      phones = []
      }) {
-        super({element});
+        super({element});        
         this._phones = phones;
-        this.onPhoneSelected = onPhoneSelected;
+       
         this._render();
 
-        this._element.addEventListener('click', (event) => {
-            const phoneEl = event.target.closest('[data-element= "phone-element"]');
-            if (!phoneEl) {
-              return;
-            }
-            const phoneId = phoneEl.dataset.phoneId;
-            this.onPhoneSelected(phoneId); 
-        })
+        this.on('click', '[data-element= "details-link"]', (event) => {
+          const phoneEl = event.target.closest('[data-element= "phone-element"]');
+            const phoneId = phoneEl.dataset.phoneId;       
+            this.emit('phone-selected', phoneId);
+        }) 
     }
 
     _render() {
@@ -30,8 +26,15 @@ export default class PhonesCatalog extends Component{
             class="thumbnail" 
             data-element= "phone-element"
             data-phone-id = ${phone.id}>
-              <a href="#!/phones/motorola-xoom-with-wi-fi" class="thumb">
-                <img alt="${phone.name}" src="${phone.imageUrl}">
+
+
+              <a 
+              href="#!/phones/motorola-xoom-with-wi-fi" 
+              class="thumb"
+              data-element = "details-link"
+              >
+              
+              <img alt="${phone.name}" src="${phone.imageUrl}">
               </a>
   
               <div class="phones__btn-buy-wrapper">
@@ -40,7 +43,10 @@ export default class PhonesCatalog extends Component{
                 </a>
               </div>
   
-              <a href="#!/phones/motorola-xoom-with-wi-fi">${phone.name}</a>
+              <a 
+              href="#!/phones/motorola-xoom-with-wi-fi"
+              data-element = "details-link"
+              >${phone.name}</a>
               <p>${phone.snippet}</p>
             </li>
             `).join('')

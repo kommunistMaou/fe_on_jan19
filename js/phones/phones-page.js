@@ -8,19 +8,33 @@ export default class PhonesPage {
         this._element = element;
         this._render();
 
-        this._catalog = new PhonesCatalog({
-            element: this._element.querySelector('[data-component = "phone-catalog"]'),
-            phones: PhonesService.getAll(), 
-            onPhoneSelected: (id) => {
-              const phoneDetails = PhonesService.getById(id);
-              this._catalog.hide();
-              this._viewer.show(phoneDetails);
-            }
-        })
+        this._initCatalog();
+        this._initViewer();
+                
+    }
 
-        this._viewer = new PhoneViewer({
-          element: this._element.querySelector('[data-component = "phone-viewer"]')
-        })
+    _initCatalog() {
+      this._catalog = new PhonesCatalog({
+        element: this._element.querySelector('[data-component = "phone-catalog"]'),
+        phones: PhonesService.getAll()          
+    })
+
+    this._catalog.subscribe('phone-selected', (id) => {
+      const phoneDetails = PhonesService.getById(id);
+      this._catalog.hide();
+      this._viewer.show(phoneDetails);
+    })
+    }
+
+    _initViewer(){
+      this._viewer = new PhoneViewer({
+        element: this._element.querySelector('[data-component = "phone-viewer"]')
+      })
+
+      this._viewer.subscribe('back', () => {
+        this._catalog.show();
+          this._viewer.hide();
+      })
     }
 
     _render() {
